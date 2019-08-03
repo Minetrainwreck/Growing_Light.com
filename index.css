@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>InspirARTion - Sketch & Draw!</title>
+		
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+		<meta name="description" content="Check out �InspirARTion� - free on-line drawing application http://intelloware.com/art">
+		
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		
+		<link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
+
+		<script src="script/jquery-1.7.1.min.js"></script>
+		<script src="script/index-min.js"></script>
+	</head>
+	<body>
+		<div id='holder'>
+		<header id='bar'>
+			<ul class='buttons leftSide'>
+				<li class='button brushes'>
+					<a href='#'></a>
+					<span class='loc'>Brush</span>
+					
+					<ul class="dropdown brushes">
+					</ul>
+				</li>
+				<li class='button brush eraser' id='BrushEraser'>
+					<a href='#'></a>
+					<span class='loc'>Erase</span>
+				</li>
+				<li class='button brush smudge' id='BrushSmudge'>
+					<a href='#'></a>
+					<span class='loc'>Smudge</span>
+				</li>
+				<li class='button sizes'>
+					<a href='#'></a>
+					<span class='loc'>Size</span>
+					
+					<ul class="dropdown fixed">
+						<li class='small hoverable size loc' id='1'>Small</li>
+						<li class='medium hoverable size selected loc' id='10'>Medium</li>
+						<li class='big hoverable size loc' id='20'>Large</li>
+					</ul>
+				</li>
+				<li class='button color'>
+					<a href='#'></a>
+					<span class='loc'>Color</span>
+					
+					<ul id='colorDropDown' class="dropdown colorPicker nocloseonclick">
+						<li style='padding: 4px; padding-left: 6px; padding-right: 6px; padding-top: 6px; margin: 0px;'>
+							<table border='0' cellpadding='0' cellspacing='0' style='border-spacing: 0px;'>
+								<tr id='colorPanelHeader'>
+									<td class='loc' colspan='2' id='colorPanelHeaderTitle'>
+										Color
+									</td>
+									<td id='pinColorHolder' style='float: right;'>
+										<span id='pinColor' class='pin'/>
+									</td>
+								</tr>
+								<tr>
+									<td style='vertical-align: top; text-align: center;'>
+										<div id="colorBrushSelected" class='selectedColor colorModeSelected'></div>
+										<div id="colorCavasSelected" class='selectedColor'></div>
+										<div class='colorPickerTool'></div>
+									</td>
+									<td rowspan='2' style="text-align: center;">
+										<div id="colorPicker"></div>
+										<input type="checkbox" id='shadow'>Add Shadow</input>
+									</td>
+									<td rowspan='2'><div id="colorPallete"></div></td>
+								</tr>
+							</table>
+						</li>
+					</ul>
+				</li>
+				
+				<li class='button symmetry'>
+					<a href='#'></a>
+					<span class='loc'>Symmetry</span>
+					
+					<ul class="dropdown fixed nocloseonclick">
+						<li class='hoverable symmetry loc' id='symmetry_H'>Horizontal</li>
+						<li class='hoverable symmetry loc' id='symmetry_V'>Vertical</li>
+						
+						<li class='loc section'>Kaleidoscope</li>
+						<li class='hoverable symmetry loc' id='symmetry_10'>10 Axis</li>
+						<li class='hoverable symmetry loc' id='symmetry_8'>8 Axis</li>
+						<li class='hoverable symmetry loc' id='symmetry_6'>6 Axis</li>
+						<li class='hoverable symmetry loc' id='symmetry_5'>5 Axis</li>
+						<li class='hoverable symmetry loc' id='symmetry_4'>4 Axis</li>
+						<li class='hoverable symmetry loc' id='symmetry_3'>3 Axis</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class='buttons rightSide'>
+				<li class='button undo' id='undo' disabled='disabled'>
+					<a href='#'></a>
+					<span class='loc'>Undo</span>
+				</li>
+				<li class='button redo' id='redo' disabled='disabled'>
+					<a href='#'></a>
+					<span class='loc'>Redo</span>
+				</li>
+				<li class='button save'>
+					<a href='#'></a>
+					<span class='loc'>Save</span>
+				</li>
+				<li class='button share'>
+					<a href='#'></a>
+					<span class='loc'>Share</span>
+				</li>
+				<li class='button clear2'>
+					<a href='#'></a>
+					<span class='loc'>Clear</span>
+				</li>
+				<li class='button android'>
+					<a href='http://bit.ly/199iVAt' target='_blank'></a>
+					<span class='loc'>For Android</span>
+				</li>
+				<li class='button about'>
+					<a href='#'></a>
+					<span class='loc'>About</span>
+				</li>
+			</ul>
+			<div class='barTitle'>
+				<div class="fb-like" data-href="https://www.facebook.com/inspirartion" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false" data-colorscheme="dark"></div>
+			</div>
+		</header>
+		
+		<!-- Content -->
+		
+		<div id='content'>
+		<canvas id='svg' style='display: none;'></canvas>
+			<canvas id='overlay'></canvas>
+			<canvas id='canvas'></canvas>
+			
+		</div>
+	</div>
+	
+	
+	<!-- Save Image Box -->
+	<div class='popupOverlay' id='sameImageBox'>
+	<div class="popup">
+		<form onsubmit="return SaveImageBox.OnOK();" action="">
+			<div style="min-width: 400px;">
+				<div class="formWithTitle">
+					<div class="formTitle loc">Save Image</div>
+					<div class="formBody" style='text-align: center;'>
+						<img src='' style='margin: 8px;' id='imgToSaveImage'/>
+						<br/>
+						<span class='loc'>Right click on image and next choose 'Save Picture As...'</span>
+						<hr/>
+						<div style="text-align: right; width: 100%;">
+							<input class="postButton" style="width: 140px;" type="button" value="Close" onclick="return SaveImageBox.Hide();" />
+						</div>
+					</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+	
+	<!-- Progress Box -->
+	<div class='popupOverlay' id='progressBox'>
+	<div class="popup">
+		<div style="min-width: 200px;">
+			<div class="formWithTitle">
+				<div class="formTitle loc">Please Wait...</div>
+				<div class="formBody" style='text-align: center;'>
+					<div class="formLoader">
+	                    <br />
+	                    <img src="img/loader_gray.gif" align="middle" />
+	                    <b><span id="progressBoxLabel" class='loc'>Please Wait...</span></b>
+	                    <br />
+	                    <br />
+            		</div>
+				</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	
+	
+	<!-- Message Box -->
+	<div class='popupOverlay' id='messageBox'>
+	<div class="popup" id="divMsgBox">
+		<form onsubmit="return MessageBox.OnOK();" action="">
+			<div style="width: 600px; margin: 0 auto;">
+				<div class="formWithTitle" style="width: 600px;">
+					<div class="formTitle"><span id="msgBoxTitle"></span></div>
+					<div class="formBody">
+					
+						<table style='width: 100%;'>
+							<tr>
+								<td rowspan='2' style='vertical-align: top;'>
+									<img id='msgIcon' src='' />
+								</td>
+								<td><div id="msgBoxLabel"></div></td>
+							</tr>
+							<tr>
+								<td style='vertical-align: top;'>
+									<input type='text' id='textValue' style="width: 98%;" />
+								</td>
+							</tr>
+							<tr>
+								<td colspan='2' style='text-align: center; font-size: 90%;'>
+									<div id='msgBoxNote'></div>
+								</td>
+							</tr>
+						</table>
+
+						<hr/>
+						<div style="text-align: right; width: 100%;">
+							<input class="postButton" id="btnMsgBoxOK" style="width: 140px;" type="submit" value="Ok" onclick="return MessageBox.OnOK();" />
+							<input class="postButton" id="btnMsgBoxCancel" style="width: 140px;" type="button" value="Cancel" onclick="return MessageBox.OnCancel();" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+	
+	<!-- Facebook -->
+	<div id="fb-root"></div>
+	<input type='hidden' name='authToken' id='authToken' value='empty' />
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '273449849386661',
+	      channelUrl : '//intelloware.com/art/channel.html',
+	      //appId: 328537373853478,
+	      //channelUrl: '//localhost/art/channel.html',
+	      status: true,
+	      cookie: true,
+	      xfbml: true
+	    });
+	  };
+
+	  (function(d){
+	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     d.getElementsByTagName('head')[0].appendChild(js);
+	   }(document));
+	</script>
+	<!-- /Facebook -->
+	
+	</body>
+</html>
